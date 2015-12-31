@@ -40,6 +40,8 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 	MQTT_Subscribe(client, MQTT_TOPIC_RESTART, 0);
 
 	MQTT_Subscribe(client, MQTT_TOPIC_UPDATE, 0);
+
+	mqttSendSettings(args);
 }
 
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args)
