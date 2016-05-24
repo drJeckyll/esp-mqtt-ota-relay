@@ -25,6 +25,22 @@ void ICACHE_FLASH_ATTR wifiConnectCb(uint8_t status)
 	}
 }
 
+void ICACHE_FLASH_ATTR mqttPublishSettings() {
+	char buff[100] = "";
+
+	os_sprintf(buff, "{\"relay1\":%d,\"relay2\":%d,\"relay3\":%d,\"relay4\":%d,\"rom\":%d,\"device\":\"%s\"}",
+		sysCfg.relay1, 
+		sysCfg.relay2, 
+		sysCfg.relay3, 
+		sysCfg.relay4, 
+		rboot_get_current_rom(),
+		DEVICE
+	);
+
+	MQTT_Publish(&mqttClient, MQTT_TOPIC_SETTINGS_REPLY, buff, os_strlen(buff), 0, 0);
+	INFO("MQTT send topic: %s, data: %s \r\n", MQTT_TOPIC_SETTINGS_REPLY, buff);
+}
+
 void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 {
 	MQTT_Client* client = (MQTT_Client*)args;
@@ -41,7 +57,7 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 
 	MQTT_Subscribe(client, MQTT_TOPIC_UPDATE, 0);
 
-	mqttSendSettings(args);
+	mqttPublishSettings(args);
 }
 
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args)
@@ -56,21 +72,7 @@ void ICACHE_FLASH_ATTR mqttPublishedCb(uint32_t *args)
 	INFO("MQTT: Published\r\n");
 }
 
-void ICACHE_FLASH_ATTR mqttPublishSettings() {
-	char buff[100] = "";
 
-	os_sprintf(buff, "{\"relay1\":%d,\"relay2\":%d,\"relay3\":%d,\"relay4\":%d,\"rom\":%d,\"device\":\"%s\"}",
-		sysCfg.relay1, 
-		sysCfg.relay2, 
-		sysCfg.relay3, 
-		sysCfg.relay4, 
-		rboot_get_current_rom(),
-		DEVICE
-	);
-
-	MQTT_Publish(&mqttClient, MQTT_TOPIC_SETTINGS_REPLY, buff, os_strlen(buff), 0, 0);
-	INFO("MQTT send topic: %s, data: %s \r\n", MQTT_TOPIC_SETTINGS_REPLY, buff);
-}
 
 void ICACHE_FLASH_ATTR mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *data, uint32_t data_len)
 {
