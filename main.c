@@ -137,6 +137,9 @@ void ICACHE_FLASH_ATTR mqttDataCb(uint32_t *args, const char* topic, uint32_t to
 	{
 		system_restart();
 	}
+
+	os_free(topicBuf);
+	os_free(dataBuf);
 }
 
 void ICACHE_FLASH_ATTR
