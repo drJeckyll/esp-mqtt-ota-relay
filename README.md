@@ -1,3 +1,7 @@
+# THIS CODE IS OBSOLETE AND WILL NOT BE UPDATED ANYMORE
+Please use new repo here: https://git.jeckyll.net/published/personal/esp8266/esp-mqtt-ota-relay
+
+
 # esp-mqtt-ota-relay
 
 This drive my 4 relays board. It is 12V relay board, but this can be used on any relay board. You can drive up to 4 relays.
